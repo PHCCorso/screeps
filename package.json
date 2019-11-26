@@ -1,0 +1,29 @@
+{
+    "name": "screeps",
+    "version": "1.0.0",
+    "description": "my screeps scripts",
+    "private": true,
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/PHCCorso/screeps.git"
+    },
+    "keywords": [
+        "game",
+        "screeps"
+    ],
+    "author": "Pedro Corso",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/PHCCorso/screeps/issues"
+    },
+    "homepage": "https://github.com/PHCCorso/screeps#readme",
+    "devDependencies": {
+        "grunt": "^1.0.4",
+        "grunt-screeps": "^1.4.0",
+        "webpack": "^4.41.2",
+        "webpack-cli": "^3.3.10"
+    }
+}
