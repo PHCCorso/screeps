@@ -331,6 +331,6 @@ ASALocalRun/
 
 Gruntfile.js
 
-ScreepsAutocomplete/*.*
+src/ScreepsAutocomplete/*.*
 
 dist/*.*

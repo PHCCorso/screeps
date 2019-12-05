@@ -23,7 +23,15 @@
     "devDependencies": {
         "grunt": "^1.0.4",
         "grunt-screeps": "^1.4.0",
-        "webpack": "^4.41.2",
-        "webpack-cli": "^3.3.10"
+        "rollup-plugin-typescript": "^1.0.1",
+        "tslib": "^1.10.0",
+        "typescript": "^3.7.2",
+        "webpack-node-externals": "^1.7.2"
+    },
+    "dependencies": {
+        "@types/lodash": "^4.14.149",
+        "@types/node": "^12.12.14",
+        "@types/screeps": "^2.5.5",
+        "pathfinding": "^0.4.18"
     }
 }
