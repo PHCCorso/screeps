@@ -58,7 +58,7 @@ const roleBuilder = {
         if (
             builders.length < buildersNeeded &&
             harvesters.length > 2 &&
-            builders.length < 15
+            builders.length < 7
         ) {
             createCreep(spawn, Role.BUILDER, [
                 ...COMMON_CREEP,

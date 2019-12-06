@@ -36,8 +36,8 @@ export const COMMON_CREEP_UPGRADE = [
     [],
     [CARRY],
     [CARRY],
-    [CARRY, CARRY], // 400
-    [CARRY, CARRY, CARRY], // 450
+    [WORK, CARRY], // 450
+    [WORK, CARRY, CARRY], // 500
 ];
 
 export const HARVESTER_CREEP_UPGRADE = [

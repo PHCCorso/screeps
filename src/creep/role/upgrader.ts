@@ -46,7 +46,12 @@ const roleUpgrader = {
 
         const harvesters = spawn.room.memory['creeps'][Role.HARVESTER];
 
-        if (upgraders.length < 5 && harvesters.length > 2) {
+        const extensionNumber = spawn.room.memory['extensions'].length;
+
+        if (
+            upgraders.length < 5 - Math.ceil(extensionNumber / 2) &&
+            harvesters.length > 2
+        ) {
             createCreep(spawn, Role.UPGRADER, [
                 ...COMMON_CREEP,
                 ...upgradeCommonCreep(spawn),
