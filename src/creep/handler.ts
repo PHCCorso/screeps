@@ -10,9 +10,15 @@ export default function handleCreeps() {
     }
 
     for (const spawnName in Game.spawns) {
+        const spawn = Game.spawns[spawnName];
         for (const roleName in RoleFunctionMap) {
             const role = RoleFunctionMap[roleName];
-            role.generate(Game.spawns[spawnName]);
+            if (
+                spawn.room.memory['hostiles'].length == 0 ||
+                roleName == Role.ATTACKER
+            ) {
+                role.generate(spawn);
+            }
         }
     }
 

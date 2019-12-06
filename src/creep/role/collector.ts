@@ -25,7 +25,6 @@ const roleCollector = {
 
         if (creep.memory['activity'] === Activity.COLLECT) {
             const tombstones = creep.room.memory['tombstones'];
-            const filledContainers = creep.room.memory['filledContainers'];
             if (tombstones.length > 0) {
                 const tombstone = Game.getObjectById(
                     tombstones[0]
@@ -57,6 +56,7 @@ const roleCollector = {
                 return Activity.WITHDRAW;
             }
 
+            const filledContainers = creep.room.memory['filledContainers'];
             if (filledContainers.length > 0) {
                 const container = Game.getObjectById(
                     filledContainers[0]
