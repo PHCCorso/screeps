@@ -64,7 +64,7 @@ export const ATTACKER_CREEP_UPGRADE = [
     [TOUGH], // 310
     [ATTACK], // 380
     [TOUGH, ATTACK], // 440
-    [TOUGH, ATTACK],
+    [TOUGH, RANGED_ATTACK],
 ];
 
 export const COMMON_CREEP: BodyPartConstant[] = [WORK, CARRY]; // 200

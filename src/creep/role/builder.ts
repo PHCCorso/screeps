@@ -19,7 +19,8 @@ const roleBuilder = {
         }
         if (
             creep.memory['activity'] !== Activity.BUILD &&
-            creep.store.getFreeCapacity() == 0
+            (creep.store.getFreeCapacity(RESOURCE_ENERGY) == 0 ||
+                creep.store[RESOURCE_ENERGY] > 0)
         ) {
             changeCreepActivity(creep, Activity.BUILD);
         }
@@ -57,7 +58,7 @@ const roleBuilder = {
         if (
             builders.length < buildersNeeded &&
             harvesters.length > 2 &&
-            builders.length < 7
+            builders.length < 15
         ) {
             createCreep(spawn, Role.BUILDER, [
                 ...COMMON_CREEP,

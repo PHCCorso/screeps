@@ -62,11 +62,8 @@ function handleRooms() {
                         s.structureType == STRUCTURE_WALL)
             )
             .sort((a, b) => {
-                if (
-                    a.structureType == STRUCTURE_RAMPART &&
-                    b.structureType != STRUCTURE_RAMPART
-                ) {
-                    return a.hits - 10000 - b.hits;
+                if (a.structureType == STRUCTURE_RAMPART) {
+                    return a.hits - 3000 - b.hits;
                 }
                 return a.hits - b.hits;
             })

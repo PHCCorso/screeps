@@ -77,7 +77,7 @@ const roleWallRepairer = {
         const harvesters = spawn.room.memory['creeps'][Role.HARVESTER];
 
         const repairersNeeded = Math.ceil(
-            spawn.room.memory['wallsAndRamparts'].length / 10
+            spawn.room.memory['wallsAndRamparts'].length / 20
         );
 
         if (repairers.length < repairersNeeded && harvesters.length > 2) {
