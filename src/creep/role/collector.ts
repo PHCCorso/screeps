@@ -87,7 +87,9 @@ const roleCollector = {
                 .find(FIND_STRUCTURES, {
                     filter: structure =>
                         (structure.structureType == STRUCTURE_EXTENSION ||
-                            structure.structureType == STRUCTURE_SPAWN) &&
+                            structure.structureType == STRUCTURE_SPAWN ||
+                            structure.structureType == STRUCTURE_TOWER) &&
+                        // @ts-ignore
                         structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0,
                 })
                 .sort(
@@ -117,7 +119,11 @@ const roleCollector = {
     generate: function(spawn: StructureSpawn) {
         const collectors = spawn.room.memory['creeps'][Role.COLLECTOR];
 
-        if (collectors.length < spawn.room.memory['filledContainers'].length) {
+        if (
+            collectors.length <
+            spawn.room.memory['filledContainers'].length +
+                spawn.room.memory['towers'].length
+        ) {
             createCreep(spawn, Role.COLLECTOR, [
                 ...COLLECTOR_CREEP,
                 ...upgradeCollectorCreep(spawn),

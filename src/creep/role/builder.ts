@@ -7,6 +7,7 @@ import {
 import { Role, COMMON_CREEP, Activity } from '../../constants/creep';
 import roleRepairer from './repairer';
 import { collectOrHarvest } from './common';
+import roleWallRepairer from './wallRepairer';
 
 const roleBuilder = {
     run: function(creep: Creep) {
@@ -37,6 +38,8 @@ const roleBuilder = {
             } else {
                 return roleRepairer.run(creep);
             }
+        } else if (creep.room.memory['wallsAndRamparts'].length > 0) {
+            roleWallRepairer.run(creep);
         } else {
             return collectOrHarvest(creep);
         }
@@ -51,7 +54,11 @@ const roleBuilder = {
             spawn.room.memory['constructionSites'].length / 2
         );
 
-        if (builders.length < buildersNeeded && harvesters.length > 2) {
+        if (
+            builders.length < buildersNeeded &&
+            harvesters.length > 2 &&
+            builders.length < 7
+        ) {
             createCreep(spawn, Role.BUILDER, [
                 ...COMMON_CREEP,
                 ...upgradeCommonCreep(spawn),

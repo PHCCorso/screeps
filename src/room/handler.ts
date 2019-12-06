@@ -38,9 +38,10 @@ function handleRooms() {
         // STRUCTURES
         // --------------------------------------------
 
-        room.memory['constructionSites'] = room
-            .find(FIND_CONSTRUCTION_SITES)
-            .map(c => c.id);
+        room.memory['towers'] = room
+            .find(FIND_STRUCTURES)
+            .filter(s => s.structureType == STRUCTURE_TOWER)
+            .map(s => s.id);
 
         room.memory['damagedStructures'] = room
             .find(FIND_STRUCTURES)
@@ -50,6 +51,25 @@ function handleRooms() {
                     s.structureType != STRUCTURE_RAMPART &&
                     s.structureType != STRUCTURE_WALL
             )
+            .map(s => s.id);
+
+        room.memory['wallsAndRamparts'] = room
+            .find(FIND_STRUCTURES)
+            .filter(
+                s =>
+                    s.hits < s.hitsMax &&
+                    (s.structureType == STRUCTURE_RAMPART ||
+                        s.structureType == STRUCTURE_WALL)
+            )
+            .sort((a, b) => {
+                if (
+                    a.structureType == STRUCTURE_RAMPART &&
+                    b.structureType != STRUCTURE_RAMPART
+                ) {
+                    return a.hits - 10000 - b.hits;
+                }
+                return a.hits - b.hits;
+            })
             .map(s => s.id);
 
         room.memory['extensions'] = room

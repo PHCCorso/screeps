@@ -24,6 +24,14 @@ function handleTowers() {
 
                     if (closestDamagedStructure) {
                         tower.repair(closestDamagedStructure);
+                    } else {
+                        const firstWallOrRampart = Game.getObjectById(
+                            tower.room.memory['wallsAndRamparts'][0]
+                        ) as StructureWall;
+
+                        if (firstWallOrRampart) {
+                            tower.repair(firstWallOrRampart);
+                        }
                     }
                 }
             }

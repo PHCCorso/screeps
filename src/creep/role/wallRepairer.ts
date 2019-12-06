@@ -7,9 +7,20 @@ import {
 } from '../../utils/creep';
 import roleHarvester from './harvester';
 import roleBuilder from './builder';
-import roleWallRepairer from './wallRepairer';
+import roleRepairer from './repairer';
 
-const roleRepairer = {
+function setWallOrRampartToRepair(creep: Creep) {
+    const firstWallOrRampart = Game.getObjectById(
+        creep.room.memory['wallsAndRamparts'][0]
+    ) as StructureWall;
+    creep.memory['wallOrRampartToRepair'] = {
+        wallOrRampart: firstWallOrRampart.id,
+        wallOrRampartHealth: firstWallOrRampart.hits,
+    };
+    return firstWallOrRampart;
+}
+
+const roleWallRepairer = {
     run: function(creep: Creep) {
         if (
             creep.memory['activity'] === Activity.REPAIR &&
@@ -20,59 +31,57 @@ const roleRepairer = {
         if (
             creep.memory['activity'] !== Activity.REPAIR &&
             creep.store.getFreeCapacity() == 0 &&
-            creep.room.memory['damagedStructures'].length > 0
+            creep.room.memory['wallsAndRamparts'].length > 0
         ) {
             changeCreepActivity(creep, Activity.REPAIR);
         }
 
         if (creep.memory['activity'] === Activity.REPAIR) {
-            const closestDamagedStructure = creep.pos.findClosestByRange(
-                FIND_STRUCTURES,
-                {
-                    filter: s =>
-                        s.hits < s.hitsMax &&
-                        s.structureType != STRUCTURE_WALL &&
-                        s.structureType != STRUCTURE_RAMPART,
-                }
-            );
-            if (closestDamagedStructure) {
-                if (creep.repair(closestDamagedStructure) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(closestDamagedStructure, {
+            if (!creep.memory['wallOrRampartToRepair']) {
+                setWallOrRampartToRepair(creep);
+            }
+            let wallOrRampartToRepair = Game.getObjectById(
+                creep.memory['wallOrRampartToRepair'].wallOrRampart
+            ) as StructureWall;
+
+            if (
+                !wallOrRampartToRepair ||
+                wallOrRampartToRepair.hits -
+                    creep.memory['wallOrRampartToRepair'].wallOrRampartHealth >=
+                    1000
+            ) {
+                wallOrRampartToRepair = setWallOrRampartToRepair(creep);
+            }
+
+            if (wallOrRampartToRepair) {
+                if (creep.repair(wallOrRampartToRepair) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(wallOrRampartToRepair, {
                         visualizePathStyle: { stroke: '#ffffff' },
                         maxOps: 5000,
                         swampCost: 2,
                     });
                 }
                 return Activity.REPAIR;
-            } else if (creep.room.memory['constructionSites'].length > 0) {
-                return roleBuilder.run(creep);
-            } else if (creep.room.memory['wallsAndRamparts'].length > 0) {
-                roleWallRepairer.run(creep);
             } else {
                 return roleHarvester.run(creep);
             }
-        } else if (
-            creep.room.memory['damagedStructures'].length == 0 &&
-            creep.room.memory['constructionSites'].length > 0
-        ) {
-            return roleBuilder.run(creep);
-        } else if (creep.room.memory['damagedStructures'].length > 0) {
+        } else if (creep.room.memory['wallsAndRamparts'].length > 0) {
             return collectOrHarvest(creep);
         } else {
             return roleHarvester.run(creep);
         }
     },
     generate: function(spawn: StructureSpawn) {
-        const repairers = spawn.room.memory['creeps'][Role.REPAIRER];
+        const repairers = spawn.room.memory['creeps'][Role.WALL_REPAIRER];
 
         const harvesters = spawn.room.memory['creeps'][Role.HARVESTER];
 
         const repairersNeeded = Math.ceil(
-            spawn.room.memory['damagedStructures'].length / 10
+            spawn.room.memory['wallsAndRamparts'].length / 10
         );
 
         if (repairers.length < repairersNeeded && harvesters.length > 2) {
-            createCreep(spawn, Role.REPAIRER, [
+            createCreep(spawn, Role.WALL_REPAIRER, [
                 ...COMMON_CREEP,
                 ...upgradeCommonCreep(spawn),
             ]);
@@ -80,4 +89,4 @@ const roleRepairer = {
     },
 };
 
-export default roleRepairer;
+export default roleWallRepairer;

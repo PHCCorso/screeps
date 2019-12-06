@@ -6,6 +6,7 @@ import roleAttacker from '../creep/role/attacker';
 import roleRepairer from '../creep/role/repairer';
 import roleCollector from '../creep/role/collector';
 import { Message } from './messages';
+import roleWallRepairer from '../creep/role/wallRepairer';
 
 export const RoleFunctionMap: {
     [key in Role]: {
@@ -18,6 +19,7 @@ export const RoleFunctionMap: {
     [Role.UPGRADER]: roleUpgrader,
     [Role.ATTACKER]: roleAttacker,
     [Role.REPAIRER]: roleRepairer,
+    [Role.WALL_REPAIRER]: roleWallRepairer,
     [Role.COLLECTOR]: roleCollector,
 };
 

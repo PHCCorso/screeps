@@ -5,6 +5,7 @@ export enum Role {
     HARVESTER = 'harvester',
     REPAIRER = 'repairer',
     UPGRADER = 'upgrader',
+    WALL_REPAIRER = 'wallRepairer',
 }
 
 export enum Activity {
