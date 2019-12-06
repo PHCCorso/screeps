@@ -36,7 +36,7 @@ const roleCollector = {
                     creep.moveTo(tombstone, {
                         visualizePathStyle: { stroke: '#ffaa00' },
                         maxOps: 5000,
-                        swampCost: 2,
+                        swampCost: 4,
                     });
                 }
                 return Activity.WITHDRAW;
@@ -50,7 +50,7 @@ const roleCollector = {
                     creep.moveTo(ruin, {
                         visualizePathStyle: { stroke: '#ffaa00' },
                         maxOps: 5000,
-                        swampCost: 2,
+                        swampCost: 4,
                     });
                 }
                 return Activity.WITHDRAW;
@@ -74,7 +74,7 @@ const roleCollector = {
                     creep.moveTo(container, {
                         visualizePathStyle: { stroke: '#ffaa00' },
                         maxOps: 5000,
-                        swampCost: 2,
+                        swampCost: 4,
                     });
                 }
                 return Activity.COLLECT;
@@ -83,7 +83,8 @@ const roleCollector = {
         }
 
         if (creep.memory['activity'] === Activity.STORE) {
-            var targets = creep.room
+            const hostiles = creep.room.memory['hostiles'];
+            const targets = creep.room
                 .find(FIND_STRUCTURES, {
                     filter: structure =>
                         (structure.structureType == STRUCTURE_EXTENSION ||
@@ -92,10 +93,14 @@ const roleCollector = {
                         // @ts-ignore
                         structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0,
                 })
-                .sort(
-                    (a, b) =>
+                .sort((a, b) => {
+                    if (hostiles.length) {
+                        return -1;
+                    }
+                    return (
                         distance(a.pos, creep.pos) - distance(b.pos, creep.pos)
-                );
+                    );
+                });
 
             if (targets.length > 0) {
                 if (
@@ -105,7 +110,7 @@ const roleCollector = {
                     creep.moveTo(targets[0], {
                         visualizePathStyle: { stroke: '#ffffff' },
                         maxOps: 5000,
-                        swampCost: 2,
+                        swampCost: 4,
                     });
                 }
                 return Activity.STORE;

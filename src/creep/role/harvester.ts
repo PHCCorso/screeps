@@ -45,7 +45,7 @@ const roleHarvester = {
                         creep.moveTo(source, {
                             visualizePathStyle: { stroke: '#ffaa00' },
                             maxOps: 5000,
-                            swampCost: 2,
+                            swampCost: 4,
                         });
                     } else {
                         creep.memory['gotoSource'] = undefined;
@@ -99,7 +99,7 @@ const roleHarvester = {
                     creep.moveTo(targets[0], {
                         visualizePathStyle: { stroke: '#ffffff' },
                         maxOps: 5000,
-                        swampCost: 2,
+                        swampCost: 4,
                     });
                 }
                 return Activity.STORE;

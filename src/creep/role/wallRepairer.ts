@@ -3,11 +3,9 @@ import { collectOrHarvest } from './common';
 import {
     createCreep,
     changeCreepActivity,
-    upgradeCommonCreep,
+    upgradeCollectorCreep,
 } from '../../utils/creep';
 import roleHarvester from './harvester';
-import roleBuilder from './builder';
-import roleRepairer from './repairer';
 
 function setWallOrRampartToRepair(creep: Creep) {
     const firstWallOrRampart = Game.getObjectById(
@@ -58,7 +56,7 @@ const roleWallRepairer = {
                     creep.moveTo(wallOrRampartToRepair, {
                         visualizePathStyle: { stroke: '#ffffff' },
                         maxOps: 5000,
-                        swampCost: 2,
+                        swampCost: 4,
                     });
                 }
                 return Activity.REPAIR;
@@ -83,7 +81,7 @@ const roleWallRepairer = {
         if (repairers.length < repairersNeeded && harvesters.length > 2) {
             createCreep(spawn, Role.WALL_REPAIRER, [
                 ...COMMON_CREEP,
-                ...upgradeCommonCreep(spawn),
+                ...upgradeCollectorCreep(spawn),
             ]);
         }
     },

@@ -37,7 +37,11 @@ export const COMMON_CREEP_UPGRADE = [
     [CARRY],
     [CARRY],
     [WORK, CARRY], // 450
-    [WORK, CARRY, CARRY], // 500
+    [WORK, CARRY],
+    [WORK, CARRY],
+    [WORK, CARRY],
+    [WORK, CARRY],
+    [WORK, CARRY],
 ];
 
 export const HARVESTER_CREEP_UPGRADE = [
@@ -46,6 +50,11 @@ export const HARVESTER_CREEP_UPGRADE = [
     [CARRY], // 300
     [WORK], // 350
     [WORK],
+    [WORK, WORK], // 500
+    [WORK, WORK], // 500
+    [WORK, WORK], // 500
+    [WORK, WORK], // 500
+    [WORK, WORK], // 500
     [WORK, WORK], // 500
 ];
 
@@ -56,6 +65,11 @@ export const COLLECTOR_CREEP_UPGRADE = [
     [CARRY],
     [CARRY, CARRY],
     [CARRY, CARRY, CARRY],
+    [CARRY, CARRY, CARRY],
+    [CARRY, CARRY, CARRY],
+    [CARRY, CARRY, CARRY],
+    [CARRY, CARRY, CARRY],
+    [CARRY, CARRY, CARRY],
 ];
 
 export const ATTACKER_CREEP_UPGRADE = [
@@ -64,6 +78,11 @@ export const ATTACKER_CREEP_UPGRADE = [
     [TOUGH], // 310
     [ATTACK], // 380
     [TOUGH, ATTACK], // 440
+    [TOUGH, RANGED_ATTACK],
+    [TOUGH, RANGED_ATTACK],
+    [TOUGH, RANGED_ATTACK],
+    [TOUGH, RANGED_ATTACK],
+    [TOUGH, RANGED_ATTACK],
     [TOUGH, RANGED_ATTACK],
 ];
 

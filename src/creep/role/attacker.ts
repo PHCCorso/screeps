@@ -27,7 +27,7 @@ const roleAttacker = {
             const hostile = creep.pos.findClosestByPath(FIND_HOSTILE_CREEPS);
 
             if (creep.attack(hostile) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(hostile, { maxOps: 5000, swampCost: 2 });
+                creep.moveTo(hostile, { maxOps: 5000, swampCost: 4 });
             }
             return Activity.ATTACK;
         }
@@ -38,7 +38,7 @@ const roleAttacker = {
             ) as StructureSpawn;
 
             if (distance(creep.pos, spawn.pos) > 10) {
-                creep.moveTo(spawn, { maxOps: 5000, swampCost: 2 });
+                creep.moveTo(spawn, { maxOps: 5000, swampCost: 4 });
                 return Activity.RETREAT;
             }
         }

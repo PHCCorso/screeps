@@ -32,7 +32,7 @@ const roleUpgrader = {
                 creep.moveTo(creep.room.controller, {
                     visualizePathStyle: { stroke: '#ffffff' },
                     maxOps: 5000,
-                    swampCost: 2,
+                    swampCost: 4,
                 });
             }
             return Activity.UPGRADE;
@@ -49,7 +49,7 @@ const roleUpgrader = {
         const extensionNumber = spawn.room.memory['extensions'].length;
 
         if (
-            upgraders.length < 5 - Math.ceil(extensionNumber / 2) &&
+            upgraders.length < 3 && //5 - Math.ceil(extensionNumber / 2) &&
             harvesters.length > 2
         ) {
             createCreep(spawn, Role.UPGRADER, [

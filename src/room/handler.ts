@@ -19,8 +19,8 @@ function handleRooms() {
             .filter(c => c.store.getUsedCapacity(RESOURCE_ENERGY) > 0)
             .sort(
                 (a: any, b: any) =>
-                    a.store.getUsedCapacity(RESOURCE_ENERGY) -
-                    b.store.getUsedCapacity(RESOURCE_ENERGY)
+                    b.store.getUsedCapacity(RESOURCE_ENERGY) -
+                    a.store.getUsedCapacity(RESOURCE_ENERGY)
             )
             .map(c => c.id);
 
@@ -42,6 +42,10 @@ function handleRooms() {
             .find(FIND_STRUCTURES)
             .filter(s => s.structureType == STRUCTURE_TOWER)
             .map(s => s.id);
+
+        room.memory['constructionSites'] = room
+            .find(FIND_CONSTRUCTION_SITES)
+            .map(c => c.id);
 
         room.memory['damagedStructures'] = room
             .find(FIND_STRUCTURES)

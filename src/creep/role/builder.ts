@@ -32,7 +32,7 @@ const roleBuilder = {
                     creep.moveTo(target, {
                         visualizePathStyle: { stroke: '#ffffff' },
                         maxOps: 5000,
-                        swampCost: 2,
+                        swampCost: 4,
                     });
                 }
                 return Activity.BUILD;
@@ -55,10 +55,12 @@ const roleBuilder = {
             spawn.room.memory['constructionSites'].length / 2
         );
 
+        const extensionNumber = spawn.room.memory['extensions'].length;
+
         if (
             builders.length < buildersNeeded &&
             harvesters.length > 2 &&
-            builders.length < 7
+            builders.length < 7 //- Math.ceil(extensionNumber / 2)
         ) {
             createCreep(spawn, Role.BUILDER, [
                 ...COMMON_CREEP,
