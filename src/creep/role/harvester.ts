@@ -110,17 +110,16 @@ const roleHarvester = {
 
     generate: function(spawn: StructureSpawn) {
         const harvesters = spawn.room.memory['creeps'][Role.HARVESTER];
-
+        let cost = 0;
         if (harvesters.length < spawn.room.memory['maxFreeSourcePositions']) {
-            while (
-                createCreep(spawn, Role.HARVESTER, [
-                    ...COMMON_CREEP,
-                    ...upgradeHarvesterCreep(spawn),
-                ]) == ERR_NOT_ENOUGH_ENERGY &&
-                spawn.room.memory['extensions'] > 1
-            ) {
-                spawn.room.memory['extensions'] -= 1;
-            }
+            cost = createCreep(spawn, Role.HARVESTER, [
+                ...COMMON_CREEP,
+                ...upgradeHarvesterCreep(spawn),
+            ]);
+        }
+
+        if (spawn.room.energyAvailable < cost && harvesters.length == 0) {
+            createCreep(spawn, Role.HARVESTER, [...COMMON_CREEP]);
         }
     },
 };

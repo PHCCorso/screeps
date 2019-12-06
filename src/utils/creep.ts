@@ -24,13 +24,18 @@ export function createCreep(
     parts.sort(bodyPartSorter);
 
     const newName = role + '_' + Game.time;
-    return spawn.spawnCreep(parts, newName, {
+
+    spawn.spawnCreep(parts, newName, {
         memory: {
             role: role,
             sourceRoom: spawn.room.name,
             sourceSpawn: spawn.id,
         },
     });
+
+    return parts.reduce((a, b: BodyPartConstant) => {
+        return a + BODYPART_COST[b];
+    }, 0);
 }
 
 function bodyPartSorter(a: BodyPartConstant, b: BodyPartConstant) {
