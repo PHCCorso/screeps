@@ -19,12 +19,18 @@ export default function handleCreeps() {
     for (const name in Game.creeps) {
         const creep = Game.creeps[name];
         const roleName = creep.memory['role'];
-        if (creep.room.memory['creeps'][Role.HARVESTER].length == 0) {
+        if (
+            (creep.room.memory['extensions'] < 4 &&
+                creep.room.memory['creeps'][Role.HARVESTER].length <
+                    creep.room.memory['maxFreeSourcePositions']) ||
+            creep.room.memory['creeps'][Role.HARVESTER].length == 0
+        ) {
             if (
                 creep.body.some(p => p.type == WORK) &&
                 creep.body.some(p => p.type == CARRY)
             ) {
-                RoleFunctionMap[Role.HARVESTER].run(creep);
+                creep.memory['role'] = Role.HARVESTER;
+                creep.room.memory['creeps'][Role.HARVESTER].push(creep.id);
             }
         }
         if (RoleFunctionMap[roleName]) RoleFunctionMap[roleName].run(creep);

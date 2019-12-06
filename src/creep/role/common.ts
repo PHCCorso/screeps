@@ -3,9 +3,15 @@ import { Activity } from '../../constants/creep';
 import roleHarvester from './harvester';
 
 export function collectOrHarvest(creep: Creep) {
-    const collectorActivity = roleCollector.run(creep);
-    if (collectorActivity !== Activity.NONE) {
-        return collectorActivity;
+    if (creep.memory['activity'] != Activity.HARVEST) {
+        const collectorActivity = roleCollector.run(creep);
+        if (collectorActivity !== Activity.NONE) {
+            return collectorActivity;
+        }
     }
-    return roleHarvester.run(creep);
+    if (creep.room.memory['containers'].length == 0) {
+        return roleHarvester.run(creep);
+    } else {
+        return roleCollector.run(creep);
+    }
 }

@@ -48,7 +48,7 @@ const roleBuilder = {
         const harvesters = spawn.room.memory['creeps'][Role.HARVESTER];
 
         const buildersNeeded = Math.ceil(
-            spawn.room.memory['constructionSites'].length / 10
+            spawn.room.memory['constructionSites'].length / 2
         );
 
         if (builders.length < buildersNeeded && harvesters.length > 2) {

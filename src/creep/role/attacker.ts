@@ -48,7 +48,7 @@ const roleAttacker = {
     generate: function(spawn: StructureSpawn) {
         if (spawn.room.memory['hostiles'].length > 0) {
             if (
-                spawn.room.memory['hostiles'].length >
+                spawn.room.memory['hostiles'].length * 2 >
                 spawn.room.memory['creeps'][Role.ATTACKER].length
             )
                 createCreep(spawn, Role.ATTACKER, [
