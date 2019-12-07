@@ -20,18 +20,18 @@ function handleTowers() {
                 }
             } else {
                 if (tower.energy > tower.energyCapacity / 2) {
-                    const closestDamagedStructure = tower.pos.findClosestByRange(
-                        FIND_STRUCTURES,
-                        {
-                            filter: s =>
-                                s.hits < s.hitsMax &&
-                                s.structureType != STRUCTURE_WALL &&
-                                s.structureType != STRUCTURE_RAMPART,
-                        }
-                    );
-
-                    if (closestDamagedStructure) {
-                        tower.repair(closestDamagedStructure);
+                    if (tower.room.memory['woundedCreeps'].length > 0) {
+                        const creep = Game.getObjectById(
+                            tower.room.memory['woundedCreeps'][0]
+                        ) as Creep;
+                        tower.heal(creep);
+                    } else if (
+                        tower.room.memory['damagedStructures'].length > 0
+                    ) {
+                        const damagedStructure = Game.getObjectById(
+                            tower.room.memory['damagedStructures'][0]
+                        ) as Structure;
+                        tower.repair(damagedStructure);
                     } else {
                         const firstWallOrRampart = Game.getObjectById(
                             tower.room.memory['wallsAndRamparts'][0]

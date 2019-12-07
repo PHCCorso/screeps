@@ -34,14 +34,15 @@ export const BODY_PART_PRIORITY = {
 export const COMMON_CREEP_UPGRADE = [
     [],
     [],
+    [CARRY], // 350
     [CARRY],
-    [CARRY],
-    [WORK, CARRY], // 450
+    [WORK, CARRY], // 500
     [WORK, CARRY],
     [WORK, CARRY],
+    [WORK, CARRY], // 600
     [WORK, CARRY],
-    [WORK, CARRY],
-    [WORK, CARRY],
+    [WORK, CARRY, CARRY], // 650
+    [WORK, WORK, CARRY], // 650
 ];
 
 export const HARVESTER_CREEP_UPGRADE = [
@@ -53,18 +54,18 @@ export const HARVESTER_CREEP_UPGRADE = [
     [WORK, WORK], // 500
     [WORK, WORK], // 500
     [WORK, WORK], // 500
-    [WORK, WORK], // 500
-    [WORK, WORK], // 500
-    [WORK, WORK], // 500
+    [WORK, WORK], // 650
+    [WORK, WORK],
+    [WORK, WORK, WORK],
 ];
 
 export const COLLECTOR_CREEP_UPGRADE = [
     [],
     [],
+    [CARRY], // 200
     [CARRY],
-    [CARRY],
-    [CARRY, CARRY],
-    [CARRY, CARRY, CARRY],
+    [CARRY, CARRY], // 300
+    [CARRY, CARRY, CARRY], // 400
     [CARRY, CARRY, CARRY],
     [CARRY, CARRY, CARRY],
     [CARRY, CARRY, CARRY],
@@ -86,6 +87,6 @@ export const ATTACKER_CREEP_UPGRADE = [
     [TOUGH, RANGED_ATTACK],
 ];
 
-export const COMMON_CREEP: BodyPartConstant[] = [WORK, CARRY]; // 200
+export const COMMON_CREEP: BodyPartConstant[] = [WORK, CARRY]; // 250
 export const ATTACKER_CREEP: BodyPartConstant[] = [TOUGH, TOUGH, ATTACK]; // 250
-export const COLLECTOR_CREEP: BodyPartConstant[] = [CARRY, MOVE]; // 150
+export const COLLECTOR_CREEP: BodyPartConstant[] = [CARRY]; // 100

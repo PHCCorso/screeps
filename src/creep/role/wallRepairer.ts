@@ -6,15 +6,18 @@ import {
     upgradeCollectorCreep,
 } from '../../utils/creep';
 import roleHarvester from './harvester';
+import roleCollector from './collector';
 
 function setWallOrRampartToRepair(creep: Creep) {
     const firstWallOrRampart = Game.getObjectById(
         creep.room.memory['wallsAndRamparts'][0]
     ) as StructureWall;
-    creep.memory['wallOrRampartToRepair'] = {
-        wallOrRampart: firstWallOrRampart.id,
-        wallOrRampartHealth: firstWallOrRampart.hits,
-    };
+    if (firstWallOrRampart) {
+        creep.memory['wallOrRampartToRepair'] = {
+            wallOrRampart: firstWallOrRampart.id,
+            wallOrRampartHealth: firstWallOrRampart.hits,
+        };
+    }
     return firstWallOrRampart;
 }
 
@@ -66,7 +69,7 @@ const roleWallRepairer = {
         } else if (creep.room.memory['wallsAndRamparts'].length > 0) {
             return collectOrHarvest(creep);
         } else {
-            return roleHarvester.run(creep);
+            return roleCollector.run(creep);
         }
     },
     generate: function(spawn: StructureSpawn) {

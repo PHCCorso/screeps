@@ -1,4 +1,5 @@
 import { Role } from '../constants/creep';
+import { MAX_WALL_HITS } from '../constants/room';
 
 function handleRooms() {
     for (const roomName in Game.rooms) {
@@ -55,13 +56,14 @@ function handleRooms() {
                     s.structureType != STRUCTURE_RAMPART &&
                     s.structureType != STRUCTURE_WALL
             )
+            .sort((a, b) => a.hits - b.hits)
             .map(s => s.id);
 
         room.memory['wallsAndRamparts'] = room
             .find(FIND_STRUCTURES)
             .filter(
                 s =>
-                    s.hits < s.hitsMax &&
+                    s.hits < MAX_WALL_HITS &&
                     (s.structureType == STRUCTURE_RAMPART ||
                         s.structureType == STRUCTURE_WALL)
             )
@@ -87,9 +89,16 @@ function handleRooms() {
             room.memory['creeps'][Role[role]] = [];
         }
 
+        room.memory['woundedCreeps'] = [];
+
         room.find(FIND_MY_CREEPS).forEach(creep => {
             const role = creep.memory['role'];
-            if (role) room.memory['creeps'][role].push(creep.id);
+            if (role) {
+                room.memory['creeps'][role].push(creep.id);
+            }
+            if (creep.hits < creep.hitsMax) {
+                room.memory['woundedCreeps'].push(creep.id);
+            }
         });
 
         const hostiles = room.find(FIND_HOSTILE_CREEPS);

@@ -19,7 +19,7 @@ const roleRepairer = {
         }
         if (
             creep.memory['activity'] !== Activity.REPAIR &&
-            creep.store.getFreeCapacity() == 0 &&
+            creep.store[RESOURCE_ENERGY] > 0 &&
             creep.room.memory['damagedStructures'].length > 0
         ) {
             changeCreepActivity(creep, Activity.REPAIR);
