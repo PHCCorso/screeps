@@ -37,6 +37,10 @@ const roleUpgrader = {
             }
             return Activity.UPGRADE;
         } else {
+            if (creep.room.memory['storages'].length) {
+                const storage = creep.room.memory['storages'][0];
+                creep.memory['collectTarget'] = storage;
+            }
             return collectOrHarvest(creep);
         }
     },

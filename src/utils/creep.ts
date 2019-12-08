@@ -50,23 +50,31 @@ export function changeCreepActivity(creep: Creep, activity: Activity) {
 export function upgradeCommonCreep(spawn: StructureSpawn) {
     const room = spawn.room;
     const extensionNumber = room.memory['extensions'].length;
-    return COMMON_CREEP_UPGRADE[extensionNumber];
+    if (COMMON_CREEP_UPGRADE.length >= extensionNumber)
+        return COMMON_CREEP_UPGRADE[extensionNumber];
+    return COMMON_CREEP_UPGRADE[COMMON_CREEP_UPGRADE.length - 1];
 }
 
 export function upgradeCollectorCreep(spawn: StructureSpawn) {
     const room = spawn.room;
     const extensionNumber = room.memory['extensions'].length;
-    return COLLECTOR_CREEP_UPGRADE[extensionNumber];
+    if (COLLECTOR_CREEP_UPGRADE.length >= extensionNumber)
+        return COLLECTOR_CREEP_UPGRADE[extensionNumber];
+    return COLLECTOR_CREEP_UPGRADE[COLLECTOR_CREEP_UPGRADE.length - 1];
 }
 
 export function upgradeAttackerCreep(spawn: StructureSpawn) {
     const room = spawn.room;
     const extensionNumber = room.memory['extensions'].length;
-    return ATTACKER_CREEP_UPGRADE[extensionNumber];
+    if (ATTACKER_CREEP_UPGRADE.length >= extensionNumber)
+        return ATTACKER_CREEP_UPGRADE[extensionNumber];
+    return ATTACKER_CREEP_UPGRADE[ATTACKER_CREEP_UPGRADE.length - 1];
 }
 
 export function upgradeHarvesterCreep(spawn: StructureSpawn) {
     const room = spawn.room;
     const extensionNumber = room.memory['extensions'].length;
-    return HARVESTER_CREEP_UPGRADE[extensionNumber];
+    if (HARVESTER_CREEP_UPGRADE.length >= extensionNumber)
+        return HARVESTER_CREEP_UPGRADE[extensionNumber];
+    return HARVESTER_CREEP_UPGRADE[HARVESTER_CREEP_UPGRADE.length - 1];
 }

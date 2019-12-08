@@ -25,6 +25,12 @@ function handleRooms() {
             )
             .map(c => c.id);
 
+        const storages = room.find(FIND_STRUCTURES, {
+            filter: structure => structure.structureType == STRUCTURE_STORAGE,
+        });
+
+        room.memory['storages'] = storages.map(s => s.id);
+
         const tombstones = room
             .find(FIND_TOMBSTONES)
             .filter(t => t.store[RESOURCE_ENERGY] > 0);
@@ -42,6 +48,11 @@ function handleRooms() {
         room.memory['towers'] = room
             .find(FIND_STRUCTURES)
             .filter(s => s.structureType == STRUCTURE_TOWER)
+            .sort(
+                (a: any, b: any) =>
+                    a.store.getUsedCapacity(RESOURCE_ENERGY) -
+                    b.store.getUsedCapacity(RESOURCE_ENERGY)
+            )
             .map(s => s.id);
 
         room.memory['constructionSites'] = room
@@ -78,6 +89,11 @@ function handleRooms() {
         room.memory['extensions'] = room
             .find(FIND_MY_STRUCTURES)
             .filter(s => s.structureType === STRUCTURE_EXTENSION)
+            .sort(
+                (a: any, b: any) =>
+                    a.store.getUsedCapacity(RESOURCE_ENERGY) -
+                    b.store.getUsedCapacity(RESOURCE_ENERGY)
+            )
             .map(e => e.id);
 
         // CREEPS

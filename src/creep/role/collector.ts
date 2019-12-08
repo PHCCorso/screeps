@@ -25,94 +25,130 @@ const roleCollector = {
 
         if (creep.memory['activity'] === Activity.COLLECT) {
             const tombstones = creep.room.memory['tombstones'];
-            if (tombstones.length > 0) {
+            let target = creep.memory['collectTarget']
+                ? (Game.getObjectById(creep.memory['collectTarget']) as any)
+                : null;
+
+            let targetHasEnergy =
+                target && target.store.getUsedCapacity(RESOURCE_ENERGY) > 0;
+
+            if (tombstones.length > 0 && !targetHasEnergy) {
                 const tombstone = Game.getObjectById(
                     tombstones[0]
                 ) as Tombstone;
-                if (
-                    creep.withdraw(tombstone, RESOURCE_ENERGY) ==
-                    ERR_NOT_IN_RANGE
-                ) {
-                    creep.moveTo(tombstone, {
-                        visualizePathStyle: { stroke: '#ffaa00' },
-                        maxOps: 5000,
-                        swampCost: 4,
-                    });
-                }
-                return Activity.WITHDRAW;
+                target = tombstone;
+                targetHasEnergy = true;
             }
-            const ruinsWithEnergy = creep.room.memory['ruinsWithEnergy'];
-            if (ruinsWithEnergy.length > 0) {
+
+            if (
+                creep.room.memory['ruinsWithEnergy'].length > 0 &&
+                !targetHasEnergy
+            ) {
+                const ruinsWithEnergy = creep.room.memory['ruinsWithEnergy'];
                 const ruin = Game.getObjectById(
                     ruinsWithEnergy[0]
                 ) as Structure;
-                if (creep.withdraw(ruin, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(ruin, {
-                        visualizePathStyle: { stroke: '#ffaa00' },
-                        maxOps: 5000,
-                        swampCost: 4,
-                    });
-                }
-                return Activity.WITHDRAW;
+                target = ruin;
+                targetHasEnergy = true;
             }
 
-            const filledContainers = creep.room.memory['filledContainers'];
-            if (filledContainers.length > 0) {
-                const container = Game.getObjectById(
-                    filledContainers[0]
-                ) as any;
+            if (
+                creep.room.memory['filledContainers'].length > 0 &&
+                !targetHasEnergy
+            ) {
+                const filledContainers = creep.room.memory['filledContainers']
+                    .map(c => Game.getObjectById(c))
+                    .sort(
+                        (a, b) =>
+                            distance(creep.pos, a.pos) -
+                            distance(creep.pos, b.pos)
+                    );
+                const container = filledContainers[0] as any;
                 if (
                     container.store.getUsedCapacity() - creep.carryCapacity <=
                     0
                 ) {
                     creep.room.memory['filledContainers'].shift();
                 }
-                if (
-                    creep.withdraw(container, RESOURCE_ENERGY) ==
-                    ERR_NOT_IN_RANGE
-                ) {
-                    creep.moveTo(container, {
-                        visualizePathStyle: { stroke: '#ffaa00' },
-                        maxOps: 5000,
-                        swampCost: 4,
-                    });
-                }
+                target = container;
+                targetHasEnergy = true;
+            }
+
+            if (creep.room.memory['storages'].length > 0 && !targetHasEnergy) {
+                const storages = creep.room.memory['storages'];
+                const storage = Game.getObjectById(storages[0]) as any;
+                target = storage;
+                targetHasEnergy = true;
+            }
+
+            if (
+                target &&
+                creep.withdraw(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE
+            ) {
+                creep.memory['storeTarget'] = undefined;
+                creep.memory['collectTarget'] = target.id;
+                creep.moveTo(target, {
+                    visualizePathStyle: { stroke: '#ffaa00' },
+                    maxOps: 5000,
+                    swampCost: 4,
+                });
                 return Activity.COLLECT;
             }
+
             return Activity.NONE;
         }
 
         if (creep.memory['activity'] === Activity.STORE) {
             const hostiles = creep.room.memory['hostiles'];
-            const targets = creep.room
-                .find(FIND_STRUCTURES, {
-                    filter: structure =>
-                        (structure.structureType == STRUCTURE_EXTENSION ||
-                            structure.structureType == STRUCTURE_SPAWN ||
-                            structure.structureType == STRUCTURE_TOWER) &&
-                        // @ts-ignore
-                        structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0,
-                })
-                .sort((a, b) => {
-                    if (hostiles.length) {
-                        return -1;
-                    }
-                    return (
-                        distance(a.pos, creep.pos) - distance(b.pos, creep.pos)
-                    );
-                });
+            let target = creep.memory['storeTarget']
+                ? (Game.getObjectById(creep.memory['storeTarget']) as any)
+                : Game.getObjectById(creep.memory['sourceSpawn']);
 
-            if (targets.length > 0) {
+            let targetHasFreeCapacity =
+                target.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+            if (
+                !targetHasFreeCapacity &&
+                creep.room.memory['extensions'].length
+            ) {
+                target = Game.getObjectById(creep.room.memory['extensions'][0]);
+                targetHasFreeCapacity =
+                    target.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+            }
+
+            if (
+                creep.room.memory['towers'].length &&
+                (!targetHasFreeCapacity || hostiles.length)
+            ) {
+                target = Game.getObjectById(creep.room.memory['towers'][0]);
+                targetHasFreeCapacity =
+                    target.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+            }
+
+            if (
+                !targetHasFreeCapacity &&
+                creep.room.memory['storages'].length &&
+                !hostiles.length
+            ) {
+                target = Game.getObjectById(creep.room.memory['storages'][0]);
+                targetHasFreeCapacity =
+                    target.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+            }
+
+            if (
+                target.id != creep.memory['collectTarget'] &&
+                targetHasFreeCapacity
+            ) {
+                creep.memory['storeTarget'] = target.id;
                 if (
-                    creep.transfer(targets[0], RESOURCE_ENERGY) ==
-                    ERR_NOT_IN_RANGE
+                    creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE
                 ) {
-                    creep.moveTo(targets[0], {
+                    creep.moveTo(target, {
                         visualizePathStyle: { stroke: '#ffffff' },
                         maxOps: 5000,
                         swampCost: 4,
                     });
                 }
+                creep.memory['collectTarget'] = undefined;
                 return Activity.STORE;
             }
             return Activity.NONE;
