@@ -39,8 +39,8 @@ const roleRepairer = {
                 if (creep.repair(closestDamagedStructure) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(closestDamagedStructure, {
                         visualizePathStyle: { stroke: '#ffffff' },
-                        maxOps: 5000,
-                        swampCost: 4,
+                        maxOps: 5000, reusePath: 15
+                        
                     });
                 }
                 return Activity.REPAIR;

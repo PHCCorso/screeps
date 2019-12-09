@@ -31,8 +31,8 @@ const roleUpgrader = {
             ) {
                 creep.moveTo(creep.room.controller, {
                     visualizePathStyle: { stroke: '#ffffff' },
-                    maxOps: 5000,
-                    swampCost: 4,
+                    maxOps: 5000, reusePath: 15
+                    
                 });
             }
             return Activity.UPGRADE;

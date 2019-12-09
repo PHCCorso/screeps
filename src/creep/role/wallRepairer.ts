@@ -59,7 +59,7 @@ const roleWallRepairer = {
                     creep.moveTo(wallOrRampartToRepair, {
                         visualizePathStyle: { stroke: '#ffffff' },
                         maxOps: 5000,
-                        swampCost: 4,
+                        reusePath: 15,
                     });
                 }
                 return Activity.REPAIR;
@@ -77,11 +77,17 @@ const roleWallRepairer = {
 
         const harvesters = spawn.room.memory['creeps'][Role.HARVESTER];
 
+        const towers = spawn.room.memory['towers'];
+
         const repairersNeeded = Math.ceil(
             spawn.room.memory['wallsAndRamparts'].length / 20
         );
 
-        if (repairers.length < repairersNeeded && harvesters.length > 2) {
+        if (
+            !towers.length &&
+            repairers.length < repairersNeeded &&
+            harvesters.length > 2
+        ) {
             createCreep(spawn, Role.WALL_REPAIRER, [
                 ...COMMON_CREEP,
                 ...upgradeCollectorCreep(spawn),

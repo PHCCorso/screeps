@@ -89,8 +89,8 @@ const roleCollector = {
                 creep.memory['collectTarget'] = target.id;
                 creep.moveTo(target, {
                     visualizePathStyle: { stroke: '#ffaa00' },
-                    maxOps: 5000,
-                    swampCost: 4,
+                    maxOps: 5000, reusePath: 15
+                    
                 });
                 return Activity.COLLECT;
             }
@@ -119,9 +119,17 @@ const roleCollector = {
                 creep.room.memory['towers'].length &&
                 (!targetHasFreeCapacity || hostiles.length)
             ) {
-                target = Game.getObjectById(creep.room.memory['towers'][0]);
-                targetHasFreeCapacity =
-                    target.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+                const tower = Game.getObjectById(
+                    creep.room.memory['towers'][0]
+                ) as any;
+                if (
+                    tower.store.getUsedCapacity(RESOURCE_ENERGY) <=
+                    tower.store.getCapacity(RESOURCE_ENERGY) / 2
+                ) {
+                    target = tower;
+                    targetHasFreeCapacity =
+                        target.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+                }
             }
 
             if (
@@ -144,8 +152,8 @@ const roleCollector = {
                 ) {
                     creep.moveTo(target, {
                         visualizePathStyle: { stroke: '#ffffff' },
-                        maxOps: 5000,
-                        swampCost: 4,
+                        maxOps: 5000, reusePath: 15
+                        
                     });
                 }
                 creep.memory['collectTarget'] = undefined;
