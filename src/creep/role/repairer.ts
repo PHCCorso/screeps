@@ -8,6 +8,7 @@ import {
 import roleHarvester from './harvester';
 import roleBuilder from './builder';
 import roleWallRepairer from './wallRepairer';
+import roleCollector from './collector';
 
 const roleRepairer = {
     run: function(creep: Creep) {
@@ -39,8 +40,8 @@ const roleRepairer = {
                 if (creep.repair(closestDamagedStructure) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(closestDamagedStructure, {
                         visualizePathStyle: { stroke: '#ffffff' },
-                        maxOps: 5000, reusePath: 15
-                        
+                        maxOps: 5000,
+                        reusePath: 15,
                     });
                 }
                 return Activity.REPAIR;
@@ -49,7 +50,7 @@ const roleRepairer = {
             } else if (creep.room.memory['wallsAndRamparts'].length > 0) {
                 roleWallRepairer.run(creep);
             } else {
-                return roleHarvester.run(creep);
+                return roleCollector.run(creep);
             }
         } else if (
             creep.room.memory['damagedStructures'].length == 0 &&
@@ -57,9 +58,13 @@ const roleRepairer = {
         ) {
             return roleBuilder.run(creep);
         } else if (creep.room.memory['damagedStructures'].length > 0) {
+            if (creep.room.memory['storages'].length) {
+                const storage = creep.room.memory['storages'][0];
+                creep.memory['collectTarget'] = storage;
+            }
             return collectOrHarvest(creep);
         } else {
-            return roleHarvester.run(creep);
+            return roleCollector.run(creep);
         }
     },
     generate: function(spawn: StructureSpawn) {

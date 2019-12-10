@@ -3,6 +3,7 @@ import {
     createCreep,
     changeCreepActivity,
     upgradeCommonCreep,
+    upgradeCollectorCreep,
 } from '../../utils/creep';
 import { Role, COMMON_CREEP, Activity } from '../../constants/creep';
 import roleRepairer from './repairer';
@@ -31,8 +32,8 @@ const roleBuilder = {
                 if (creep.build(target) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(target, {
                         visualizePathStyle: { stroke: '#ffffff' },
-                        maxOps: 5000, reusePath: 15
-                        
+                        maxOps: 5000,
+                        reusePath: 15,
                     });
                 }
                 return Activity.BUILD;
@@ -42,6 +43,10 @@ const roleBuilder = {
         } else if (creep.room.memory['wallsAndRamparts'].length > 0) {
             roleWallRepairer.run(creep);
         } else {
+            if (creep.room.memory['storages'].length) {
+                const storage = creep.room.memory['storages'][0];
+                creep.memory['collectTarget'] = storage;
+            }
             return collectOrHarvest(creep);
         }
     },
@@ -64,7 +69,7 @@ const roleBuilder = {
         ) {
             createCreep(spawn, Role.BUILDER, [
                 ...COMMON_CREEP,
-                ...upgradeCommonCreep(spawn),
+                ...upgradeCollectorCreep(spawn),
             ]);
         }
     },

@@ -83,14 +83,15 @@ const roleCollector = {
 
             if (
                 target &&
-                creep.withdraw(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE
+                creep.withdraw(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE &&
+                creep.memory['storeTarget'] != target.id
             ) {
                 creep.memory['storeTarget'] = undefined;
                 creep.memory['collectTarget'] = target.id;
                 creep.moveTo(target, {
                     visualizePathStyle: { stroke: '#ffaa00' },
-                    maxOps: 5000, reusePath: 15
-                    
+                    maxOps: 5000,
+                    reusePath: 15,
                 });
                 return Activity.COLLECT;
             }
@@ -124,7 +125,8 @@ const roleCollector = {
                 ) as any;
                 if (
                     tower.store.getUsedCapacity(RESOURCE_ENERGY) <=
-                    tower.store.getCapacity(RESOURCE_ENERGY) / 2
+                        tower.store.getCapacity(RESOURCE_ENERGY) / 2 ||
+                    hostiles.length
                 ) {
                     target = tower;
                     targetHasFreeCapacity =
@@ -143,7 +145,7 @@ const roleCollector = {
             }
 
             if (
-                target.id != creep.memory['collectTarget'] &&
+                creep.memory['storeTarget'] != creep.memory['collectTarget'] &&
                 targetHasFreeCapacity
             ) {
                 creep.memory['storeTarget'] = target.id;
@@ -152,14 +154,14 @@ const roleCollector = {
                 ) {
                     creep.moveTo(target, {
                         visualizePathStyle: { stroke: '#ffffff' },
-                        maxOps: 5000, reusePath: 15
-                        
+                        maxOps: 5000,
+                        reusePath: 15,
                     });
                 }
                 creep.memory['collectTarget'] = undefined;
                 return Activity.STORE;
             }
-            return Activity.NONE;
+            return Activity.COLLECT;
         }
 
         return Activity.NONE;

@@ -64,9 +64,13 @@ const roleWallRepairer = {
                 }
                 return Activity.REPAIR;
             } else {
-                return roleHarvester.run(creep);
+                return collectOrHarvest(creep);
             }
         } else if (creep.room.memory['wallsAndRamparts'].length > 0) {
+            if (creep.room.memory['storages'].length) {
+                const storage = creep.room.memory['storages'][0];
+                creep.memory['collectTarget'] = storage;
+            }
             return collectOrHarvest(creep);
         } else {
             return roleCollector.run(creep);
