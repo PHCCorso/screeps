@@ -21,7 +21,7 @@
     },
     "homepage": "https://github.com/PHCCorso/screeps#readme",
     "devDependencies": {
-        "grunt": "^1.0.4",
+        "grunt": "^1.6.1",
         "grunt-screeps": "^1.4.0",
         "rollup-plugin-typescript": "^1.0.1",
         "tslib": "^1.10.0",
